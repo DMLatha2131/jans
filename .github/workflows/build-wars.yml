@@ -23,7 +23,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: ${{ github.repository }}
-        token: ${{ secrets.githubtoken }}
+        token: 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
         
     - name: File Changes Action
       uses: trilom/file-changes-action@v1.2.4
