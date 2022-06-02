@@ -8,21 +8,30 @@ on:
       - '**/*.yml'
   
   push:
-    branches:
+   branches:
       - master
       - main
-    paths-ignore:
+      
+   paths-ignore:
       - '**/*.yml'
+env:
+  PKG_NUMBER: "${{ github.event.repository.name }}_package_${{ github.run_number }}"
+  PKG_OUTPUT_PATH: "$HOME/${{ github.event.repository.name }}_package_${{ github.run_number }}"
+  
 jobs:
   build:
     name: Build Package
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:    
+    steps: 
+    - name : Variables
+      run: |
+         ${{ github.GITHUB_REPOSITORY }}
+         
     - uses: actions/checkout@v1
       with:
-          repository: ${{ github.GITHUB_REPOSITORY }}
+          repository: ${{ github.repository }}
           token: ${{ secrets.githubtoken }}
         
     - name: File Changes Action
@@ -95,5 +104,20 @@ jobs:
           echo " git add files"
           cat $HOME/git_add_mod.csv
           
-          echo " git deleted files"
-          $HOME/git_deleted.csv
+          #echo " git deleted files"
+          #cat $HOME/git_deleted.csv
+          
+          echo "Initiating incremental build packaging"
+          mkdir -p "${{ env.PKG_NUMBER }}"
+          pwd
+          
+          sudo chmod 0755 automation/warbuild.sh
+          
+          echo "Copying files for build..."
+          bash automation/warbuild.sh $HOME/git_add_mod.csv  ${{ github.repository }} "${{ env.PKG_NUMBER }}/"
+          
+    - uses: actions/upload-artifact@v2
+      with:
+          name: ${{ env.PKG_NUMBER }}
+          path: ${{ env.PKG_NUMBER }}
+          
