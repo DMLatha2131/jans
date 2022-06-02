@@ -25,6 +25,9 @@ jobs:
         git config --global --add url."git@github.com:".insteadOf "https://github.com/"
         
     - uses: actions/checkout@v2
+      with:
+          repository: ${{ github.repository }}
+          token: ${{ secrets.githubtoken }}
         
     - name: File Changes Action
       uses: trilom/file-changes-action@v1.2.4
