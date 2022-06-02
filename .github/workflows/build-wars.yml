@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:    
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v1
       with:
-          repository: ${{ github.repository }}
-          token: ${{ secrets.githutoken }}
+          repository: ${{ github.GITHUB_REPOSITORY }}
+          token: ${{ secrets.githubtoken }}
         
     - name: File Changes Action
       uses: trilom/file-changes-action@v1.2.4
