@@ -1,4 +1,4 @@
-name: microk8s
+name: Build Pacakge
 on:
   pull_request:
     branches:
