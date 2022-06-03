@@ -1,19 +1,22 @@
-name: Build Pacakge
+name: Build Pacakge 1
 on:
   pull_request:
     branches:
       - master
       - main
+      - war-builds
     paths-ignore:
       - '**/*.yml'
+      - '/pom.xml'
   
   push:
    branches:
       - master
       - main
-      
+      - war-builds
    paths-ignore:
       - '**/*.yml'
+      - 'pom.xml'
 env:
   PKG_NUMBER: "${{ github.event.repository.name }}_package_${{ github.run_number }}"
   PKG_OUTPUT_PATH: "$HOME/${{ github.event.repository.name }}_package_${{ github.run_number }}"
@@ -33,91 +36,20 @@ jobs:
       with:
           repository: ${{ github.repository }}
           token: ${{ secrets.githubtoken }}
-        
-    - name: File Changes Action
-      uses: trilom/file-changes-action@v1.2.4
-      id: file_changes
+    - uses: actions/setup-java@v1
       with:
-          output: ','
-          fileOutput: ','
+          java-version: '14'
 
-    - name: Building package...
-      id: prepare_git_log
+    - name: Publish package
       run: |
-          echo "Files list..."
-          cat $HOME/files.csv
-
-          # ****************************************** #
-          #         READING ADDED FILES
-          # ****************************************** #
-          echo "Files added..."
-          cat $HOME/files_added.csv
-
-          echo "Parsing added files into array..."
-          files_added_str=$(cat $HOME/files_added.csv)
-
-          OIFS="$IFS"
-          IFS=','
-          read -a files_added_arr <<< "$files_added_str"
-          for ADDED_FILE in "${files_added_arr[@]}"; do
-            echo "Added file: $ADDED_FILE"
-            echo "$ADDED_FILE" >> $HOME/git_add_mod.csv
-          done;
-          IFS="$OIFS"
-
-          # ****************************************** #
-          #         READING MODIFIED FILES
-          # ****************************************** #
-          echo "Files modified..."
-          cat $HOME/files_modified.csv
-
-          echo "Parsing modified files into array..."
-          files_modified_str=$(cat $HOME/files_modified.csv)
-
-          OIFS="$IFS"
-          IFS=','
-          read -a files_modified_arr <<< "$files_modified_str"
-          for MODIFIED_FILE in "${files_modified_arr[@]}"; do
-            echo "Modified file: $MODIFIED_FILE"
-            echo "$MODIFIED_FILE" >> $HOME/git_add_mod.csv
-          done;
-          IFS="$OIFS"
-          
-          # ****************************************** #
-          #         READING DELETED FILES
-          # ****************************************** #
-          echo "Files Removed..."
-          cat $HOME/files_removed.csv
-
-          echo "Parsing deleted files into array..."
-          files_deleted_str=$(cat $HOME/files_removed.csv)
-
-          OIFS="$IFS"
-          IFS=','
-          read -a files_deleted_arr <<< "$files_deleted_str"
-          for DELETED_FILE in "${files_deleted_arr[@]}"; do
-            echo "Modified file: $DELETED_FILE"
-            echo "$DELETED_FILE" >> $HOME/git_deleted.csv
-          done;
-          IFS="$OIFS"
-          
-          echo " git add files"
-          cat $HOME/git_add_mod.csv
-          
-          #echo " git deleted files"
-          #cat $HOME/git_deleted.csv
-          
-          echo "Initiating incremental build packaging"
-          mkdir -p "${{ env.PKG_NUMBER }}"
-          pwd
-          
-          sudo chmod 0755 automation/warbuild.sh
-          
-          echo "Copying files for build..."
-          bash automation/warbuild.sh $HOME/git_add_mod.csv  ${{ github.repository }} "${{ env.PKG_NUMBER }}/"
-          
-    - uses: actions/upload-artifact@v2
+           pwd
+           mvn -B package --file janssenproject/pom.xml
+           mkdir staging
+           cp -rf */*/target/*.* staging/
+           
+    - uses: actions/upload-artifact@v1
       with:
-          name: ${{ env.PKG_NUMBER }}
-          path: ${{ env.PKG_NUMBER }}
+         name: Package
+         path: staging
+
           
