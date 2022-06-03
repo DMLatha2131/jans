@@ -7,7 +7,7 @@ on:
       - war-builds
     paths-ignore:
       - '**/*.yml'
-      - '/pom.xml'
+      - 'pom.xml'
   
   push:
    branches:
@@ -44,7 +44,7 @@ jobs:
       run: |
            pwd
            mvn -Dmaven.test.skip=true -Ddependency-check.skip=true clean compile install
-           mvn -B package --file janssenproject/pom.xml
+           mvn -B package --file jans-auth-server/pom.xml
            mkdir staging
            cp -rf */*/target/*.* staging/
            
