@@ -43,6 +43,7 @@ jobs:
     - name: Publish package
       run: |
            pwd
+           mvn -Dmaven.test.skip=true -Ddependency-check.skip=true clean compile install
            mvn -B package --file janssenproject/pom.xml
            mkdir staging
            cp -rf */*/target/*.* staging/
