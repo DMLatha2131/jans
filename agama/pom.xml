@@ -57,7 +57,7 @@
     <repository>
       <id>github</id>
       <name>LathaD2131</name>
-      <url>https://maven.pkg.github.com/${{ github.repository }}</url>
+      <url>https://maven.pkg.github.com/moabu/jans</url>
     </repository>
   </distributionManagement>    
 </project>
