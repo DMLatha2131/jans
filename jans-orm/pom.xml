@@ -5,6 +5,13 @@
 	<packaging>pom</packaging>
 	<version>1.0.1-SNAPSHOT</version>
 	<name>orm</name>
+	<distributionManagement>
+	  <repository>
+	      <id>github</id>
+	       <name>LathaD2131</name>
+	      <url>https://maven.pkg.github.com/DMLatha2131/jans</url>
+	   </repository>
+       </distributionManagement> 
 
 	<prerequisites>
 		<maven>${maven.min-version}</maven>
