@@ -21,7 +21,7 @@ on:
    branches:
       - master
       - main
-      - war-buildstest
+      #- war-buildstest
    paths:
       - 'agama/**'
       - 'jans-auth-server/**'
