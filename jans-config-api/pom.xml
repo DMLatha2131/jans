@@ -7,6 +7,13 @@
 	<packaging>pom</packaging>
 	<version>1.0.1-SNAPSHOT</version>
 	<name>jans-config-api-parent</name>
+	<distributionManagement>
+	  <repository>
+	      <id>github</id>
+	       <name>LathaD2131</name>
+	      <url>https://maven.pkg.github.com/DMLatha2131/jans</url>
+	   </repository>
+       </distributionManagement> 
 
 	<properties>
 		<maven.min-version>3.3.9</maven.min-version>
