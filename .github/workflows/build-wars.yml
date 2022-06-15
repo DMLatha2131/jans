@@ -4,7 +4,7 @@ on:
     branches:
       - master
       - main
-      - war-builds*
+      - war-buildstest
     paths:
       - 'agama/**'
       - 'jans-auth-server/**'
@@ -21,7 +21,7 @@ on:
    branches:
       - master
       - main
-      - war-builds*
+      - war-buildstest
    paths:
       - 'agama/**'
       - 'jans-auth-server/**'
@@ -33,8 +33,6 @@ on:
       - 'jans-notify/**'
       - 'jans-orm/**'
       - 'jans-scim/**'
-      - '!**/**/**.yml'
-      - '!pom.xml'
 jobs:
   build:
     name: Build Package
